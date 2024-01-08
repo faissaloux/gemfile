@@ -2,20 +2,18 @@
   "name": "@faissaloux/gemfile",
   "type": "module",
   "version": "0.1.0",
-  "description": "gemfile parser",
-  "author": "Faissal Wahabali",
-  "email": "contact@faissaloux.com",
-  "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "test": "jest"
+  "author": {
+    "name": "Faissal Wahabali",
+    "email": "contact@faissaloux.com",
+    "url": "https://www.faissaloux.com"
   },
+  "description": "gemfile parser",
+  "keywords": [
+    "Gemfile",
+    "parser"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/faissaloux/gemfile",
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.7",
@@ -24,5 +22,15 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
-  }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "jest"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
 }
