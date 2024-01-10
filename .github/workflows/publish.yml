@@ -1,8 +1,6 @@
 name: "publish"
 
 on:
-  workflow_dispatch:
-  push:
   release:
     types: [published]
 
@@ -14,7 +12,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "20"
-      - run: yarn
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          registry-url: https://registry.npmjs.org
+      - name: publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
