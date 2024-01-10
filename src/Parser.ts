@@ -1,35 +1,23 @@
 import * as fs from 'fs';
 
 export default class Parser {
-    readonly VERSION_SYMBOLS = [
-        "<", "<=", "=", "!=", ">", ">=", "~>",
-    ];
-    readonly DATA = [
-        "name",
-        "version",
-    ];
-    json: string = "";
+    readonly VERSION_SYMBOLS = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
+    json: {[key: string]: Array<{[key: string]: string}>} = {};
     root: string = "dependencies";
     
     dependencyIsDetected(line: string): boolean {
         return line.startsWith("gem ");
     }
 
-    filterSupportedData(dependency: string[]): string[] {
-        return dependency.filter(elem => {
-            for (let record of this.DATA) {
-                if (elem.includes(record)) {
-                    return true;
-                }
-            }
-        });
+    includeName(dependency: {[key: string]: string}, lineArray: string[]): void {
+        dependency["name"] = lineArray[0].replace("gem", "").replaceAll('"', "").trim();
     }
 
-    includeVersion(dependency: string[]): void {
+    includeVersion(dependency: {[key: string]: string}, lineArray: string[]): void {
         let versions: string[] = [];
         let versionsIndexes: number[] = [];
 
-        for (let [index, elem] of dependency.entries()) {
+        for (let [index, elem] of lineArray.entries()) {
             let hasDigit = elem.match(/\d/);
 
             if (!elem.includes(" ") && hasDigit && hasDigit["index"]) {
@@ -44,12 +32,12 @@ export default class Parser {
             }
         }
 
-        dependency.splice(versionsIndexes[0], versionsIndexes.length);
-        dependency.push(`"version": "${versions.join(", ")}"`);
+        dependency["version"] = versions.join(", ");
     }
 
-    parseDependency(line: string): string[] {
-        let dependency: string[] = line.split(",");
+    parseDependency(line: string): {[key: string]: string} {
+        let lineArray: string[] = line.split(",");
+        let dependency: {[key: string]: string} = {};
         let version_detected: boolean = false;
 
         for (let symbol of this.VERSION_SYMBOLS) {
@@ -58,14 +46,13 @@ export default class Parser {
             }
         }
     
-        dependency = dependency.map(elem => elem.trim());
-        dependency[0] = dependency[0].replace("gem", '"name":');
+        lineArray = lineArray.map(elem => elem.trim());
+
+        this.includeName(dependency, lineArray);
 
         if (version_detected) {
-            this.includeVersion(dependency);
+            this.includeVersion(dependency, lineArray);
         }
-
-        dependency = this.filterSupportedData(dependency);
 
         return dependency;
     }
@@ -75,36 +62,27 @@ export default class Parser {
             if (err) {
                 if (err.code === 'ENOENT') {
                     console.error(`${file} doesn't exist!`);
-    
+
                     return;
                 }
-            
+
                 throw err;
             }
 
-            let first: boolean = true;
-            this.json += `{"${this.root}": [`;
+            let dependencies: Array<{[key: string]: string}> = [];
 
-            content.split(/\r?\n/).forEach((line: string) => {    
+            content.split(/\r?\n/).forEach((line: string) => {
                 line = line.trim();
 
                 if (this.dependencyIsDetected(line)) {
-                    if (!first) {
-                        this.json += ",";
-                    }
-
                     let dependency = this.parseDependency(line);
-                    this.json += "{" + dependency + "}";
-
-                    if (first) {
-                        first = false;
-                    }
+                    dependencies.push(dependency);
                 }
             });
-    
-            this.json += "]}";
-    
-            console.log( JSON.parse(this.json) );
+
+            this.json[this.root] = dependencies;
+
+            console.log(JSON.stringify(this.json));
         });
     }
 }
