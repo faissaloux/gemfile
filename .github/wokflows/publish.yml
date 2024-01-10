@@ -20,9 +20,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: https://npm.pkg.github.com
+          registry-url: 'https://registry.npmjs.org'
       - name: publish
-        run: npm run build
-        run: npm publish --access public
+        run: yarn
+        run: yarn build
+        run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
