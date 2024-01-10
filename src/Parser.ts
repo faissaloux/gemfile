@@ -15,6 +15,16 @@ export default class Parser {
         return line.startsWith("gem ");
     }
 
+    filterSupportedData(dependency: string[]): string[] {
+        return dependency.filter(elem => {
+            for (let record of this.DATA) {
+                if (elem.includes(record)) {
+                    return true;
+                }
+            }
+        });
+    }
+
     parseDependency(line: string): string[] {
         let dependency: string[] = line.split(",");
         let version_detected: boolean = false;
@@ -52,13 +62,7 @@ export default class Parser {
             dependency.push(`"version": "${versions.join(", ")}"`);
         }
 
-        dependency = dependency.filter(elem => {
-            for (let record of this.DATA) {
-                if (elem.includes(record)) {
-                    return true;
-                }
-            }
-        });
+        dependency = this.filterSupportedData(dependency);
 
         return dependency;
     }
