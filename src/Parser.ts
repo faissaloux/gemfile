@@ -57,32 +57,26 @@ export default class Parser {
         return dependency;
     }
 
-    parse(file: string) {
-        fs.readFile(file, 'utf8', (err, fileContent) => {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    console.error(`${file} doesn't exist!`);
+    parse(file: string): string {
+        if (!fs.existsSync(file)) {
+            throw new Error(`${file} doesn't exist!`);
+        }
 
-                    return;
-                }
+        const fileContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
 
-                throw err;
+        let dependencies: Array<{[key: string]: string}> = [];
+
+        fileContent.split(/\r?\n/).forEach((line: string) => {
+            line = line.trim();
+
+            if (this.dependencyIsDetected(line)) {
+                let dependency = this.parseDependency(line);
+                dependencies.push(dependency);
             }
-
-            let dependencies: Array<{[key: string]: string}> = [];
-
-            fileContent.split(/\r?\n/).forEach((line: string) => {
-                line = line.trim();
-
-                if (this.dependencyIsDetected(line)) {
-                    let dependency = this.parseDependency(line);
-                    dependencies.push(dependency);
-                }
-            });
-
-            this.content[this.root] = dependencies;
-
-            console.log(JSON.stringify(this.content));
         });
+
+        this.content[this.root] = dependencies;
+
+        return JSON.stringify(this.content);
     }
 }
