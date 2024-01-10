@@ -11,7 +11,7 @@ export default class Parser {
         return line.startsWith("gem ");
     }
 
-    parseLine(line: string): string[] {
+    parseDependency(line: string): string[] {
         let dependency: string[] = line.split(",");
         let version_detected: boolean = false;
 
@@ -75,7 +75,7 @@ export default class Parser {
                         this.json += ",";
                     }
 
-                    let dependency = this.parseLine(line);
+                    let dependency = this.parseDependency(line);
                     this.json += "{" + dependency + "}";
 
                     if (first) {
