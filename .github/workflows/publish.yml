@@ -1,6 +1,8 @@
 name: "publish"
 
 on:
+  workflow_dispatch:
+  push:
   release:
     types: [published]
 
