@@ -4,6 +4,10 @@ export default class Parser {
     readonly VERSION_SYMBOLS = [
         "<", "<=", "=", "!=", ">", ">=", "~>",
     ];
+    readonly DATA = [
+        "name",
+        "version",
+    ];
     json: string = "";
     root: string = "dependencies";
     
@@ -23,7 +27,6 @@ export default class Parser {
     
         dependency = dependency.map(elem => elem.trim());
         dependency[0] = dependency[0].replace("gem", '"name":');
-        dependency = dependency.filter(elem => !elem.includes("platforms"));
 
         if (version_detected) {
             let versions: string[] = [];
@@ -48,6 +51,14 @@ export default class Parser {
 
             dependency.push(`"version": "${versions.join(", ")}"`);
         }
+
+        dependency = dependency.filter(elem => {
+            for (let record of this.DATA) {
+                if (elem.includes(record)) {
+                    return true;
+                }
+            }
+        });
 
         return dependency;
     }
@@ -85,6 +96,9 @@ export default class Parser {
             });
     
             this.json += "]}";
+
+            console.log("=================================");
+            console.log(this.json);
     
             console.log( JSON.parse(this.json) );
         });
