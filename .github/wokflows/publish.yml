@@ -1,4 +1,4 @@
-name: "public"
+name: "publish"
 
 on:
   release:
@@ -9,14 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org
       - name: publish
         run: npm publish --access public
-        working-directory: src
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
