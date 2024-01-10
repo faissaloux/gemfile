@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 export default class Parser {
     readonly VERSION_SYMBOLS = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
-    json: {[key: string]: Array<{[key: string]: string}>} = {};
+    content: {[key: string]: Array<{[key: string]: string}>} = {};
     root: string = "dependencies";
     
     dependencyIsDetected(line: string): boolean {
@@ -58,7 +58,7 @@ export default class Parser {
     }
 
     parse(file: string) {
-        fs.readFile(file, 'utf8', (err, content) => {
+        fs.readFile(file, 'utf8', (err, fileContent) => {
             if (err) {
                 if (err.code === 'ENOENT') {
                     console.error(`${file} doesn't exist!`);
@@ -71,7 +71,7 @@ export default class Parser {
 
             let dependencies: Array<{[key: string]: string}> = [];
 
-            content.split(/\r?\n/).forEach((line: string) => {
+            fileContent.split(/\r?\n/).forEach((line: string) => {
                 line = line.trim();
 
                 if (this.dependencyIsDetected(line)) {
@@ -80,9 +80,9 @@ export default class Parser {
                 }
             });
 
-            this.json[this.root] = dependencies;
+            this.content[this.root] = dependencies;
 
-            console.log(JSON.stringify(this.json));
+            console.log(JSON.stringify(this.content));
         });
     }
 }
