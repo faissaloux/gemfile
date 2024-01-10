@@ -25,6 +25,29 @@ export default class Parser {
         });
     }
 
+    includeVersion(dependency: string[]): void {
+        let versions: string[] = [];
+        let versionsIndexes: number[] = [];
+
+        for (let [index, elem] of dependency.entries()) {
+            let hasDigit = elem.match(/\d/);
+
+            if (!elem.includes(" ") && hasDigit && hasDigit["index"]) {
+                elem = elem.slice(0, hasDigit["index"]) + " " + elem.slice(hasDigit["index"]);
+            }
+
+            for (let symbol of this.VERSION_SYMBOLS) {
+                if (elem.includes("\"" + symbol + " ")) {
+                    versions.push(elem.replaceAll('"', ''));
+                    versionsIndexes.push(index);
+                }
+            }
+        }
+
+        dependency.splice(versionsIndexes[0], versionsIndexes.length);
+        dependency.push(`"version": "${versions.join(", ")}"`);
+    }
+
     parseDependency(line: string): string[] {
         let dependency: string[] = line.split(",");
         let version_detected: boolean = false;
@@ -39,27 +62,7 @@ export default class Parser {
         dependency[0] = dependency[0].replace("gem", '"name":');
 
         if (version_detected) {
-            let versions: string[] = [];
-            let versionsIndexes: number[] = [];
-
-            for (let [index, elem] of dependency.entries()) {
-                let hasDigit = elem.match(/\d/);
-
-                if (!elem.includes(" ") && hasDigit && hasDigit["index"]) {
-                    elem = elem.slice(0, hasDigit["index"]) + " " + elem.slice(hasDigit["index"]);
-                }
-
-                for (let symbol of this.VERSION_SYMBOLS) {
-                    if (elem.includes("\"" + symbol + " ")) {
-                        versions.push(elem.replaceAll('"', ''));
-                        versionsIndexes.push(index);
-                    }
-                }
-            }
-
-            dependency.splice(versionsIndexes[0], versionsIndexes.length);
-
-            dependency.push(`"version": "${versions.join(", ")}"`);
+            this.includeVersion(dependency);
         }
 
         dependency = this.filterSupportedData(dependency);
@@ -100,9 +103,6 @@ export default class Parser {
             });
     
             this.json += "]}";
-
-            console.log("=================================");
-            console.log(this.json);
     
             console.log( JSON.parse(this.json) );
         });
