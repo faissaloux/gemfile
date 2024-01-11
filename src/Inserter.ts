@@ -17,9 +17,8 @@ export default class Inserter {
 
     version(): this {
         let versions: string[] = [];
-        let versionsIndexes: number[] = [];
 
-        for (let [index, elem] of this.lineArray.entries()) {
+        for (let elem of this.lineArray) {
             let hasDigit = elem.match(/\d/);
 
             if (!elem.includes(" ") && hasDigit && hasDigit["index"]) {
@@ -29,7 +28,6 @@ export default class Inserter {
             for (let symbol of this.VERSION_SYMBOLS) {
                 if (elem.includes("\"" + symbol + " ")) {
                     versions.push(elem.replaceAll('"', ''));
-                    versionsIndexes.push(index);
                 }
             }
         }
