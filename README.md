@@ -1,12 +1,13 @@
 # Gemfile
 
+[![npm version](https://badge.fury.io/js/@faissaloux%2Fgemfile.svg)](https://badge.fury.io/js/@faissaloux%2Fgemfile)
+
 ## Installation
-#### npm
+Install @faissaloux/gemfile using the package manager you want:
+
 ```bash
     npm install @faissaloux/gemfile
 ```
-
-#### yarn
 ```bash
     yarn add @faissaloux/gemfile
 ```
