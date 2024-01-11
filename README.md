@@ -1,8 +1,14 @@
 # Gemfile
 
 ## Installation
+#### npm
 ```bash
     npm install @faissaloux/gemfile
+```
+
+#### yarn
+```bash
+    yarn add @faissaloux/gemfile
 ```
 
 ## Usage
