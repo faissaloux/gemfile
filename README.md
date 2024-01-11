@@ -1,6 +1,6 @@
 # Gemfile
 
-[![npm version](https://badge.fury.io/js/@faissaloux%2Fgemfile.svg)](https://badge.fury.io/js/@faissaloux%2Fgemfile)
+[![npm version](https://badge.fury.io/js/@faissaloux%2Fgemfile.svg)](https://badge.fury.io/js/@faissaloux%2Fgemfile) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/faissaloux/gemfile/blob/main/LICENSE)
 
 ## Installation
 Install `@faissaloux/gemfile` using the package manager you want:
