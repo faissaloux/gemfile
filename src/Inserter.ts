@@ -38,4 +38,14 @@ export default class Inserter {
 
         return this;
     }
+
+    require(): this {
+        for (let elem of this.lineArray) {
+            if (elem.includes("require")) {
+                this.dependency["require"] = elem.replace('require: ', "");
+            }
+        }
+
+        return this;
+    }
 }
