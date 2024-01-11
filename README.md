@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/@faissaloux%2Fgemfile.svg)](https://badge.fury.io/js/@faissaloux%2Fgemfile)
 
 ## Installation
-Install @faissaloux/gemfile using the package manager you want:
+Install `@faissaloux/gemfile` using the package manager you want:
 
 ```bash
     npm install @faissaloux/gemfile
