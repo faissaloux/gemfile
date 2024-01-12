@@ -50,7 +50,7 @@ export default class Inserter {
 
     require(): this {
         for (let elem of this.lineArray) {
-            if (elem.includes("require")) {
+            if (elem.includes("require: ")) {
                 this.dependency["require"] = elem.replace("require: ", "");
             }
         }
@@ -60,7 +60,7 @@ export default class Inserter {
 
     github(): this {
         for (let elem of this.lineArray) {
-            if (elem.includes("github")) {
+            if (elem.includes("github: ")) {
                 this.dependency["github"] = elem.replace("github: ", "").replaceAll("\"", "");
             }
         }
