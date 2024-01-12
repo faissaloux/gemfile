@@ -15,7 +15,7 @@ export default class Parser {
     
         lineArray = lineArray.map(elem => elem.trim());
 
-        new Inserter(dependency, lineArray).name().version().require();
+        new Inserter(dependency, lineArray).insert();
 
         return dependency;
     }
