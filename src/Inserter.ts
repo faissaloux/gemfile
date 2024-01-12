@@ -1,5 +1,6 @@
 export default class Inserter {
-    readonly VERSION_SYMBOLS = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
+    readonly VERSION_SYMBOLS: string[] = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
+    readonly FIELDS: string[] = ["name", "version", "require", "github"];
 
     dependency: {[key: string]: string};
     lineArray: string[];
@@ -7,6 +8,14 @@ export default class Inserter {
     constructor(dependency: {[key: string]: string}, lineArray: string[]) {
         this.dependency = dependency;
         this.lineArray = lineArray;
+    }
+
+    insert(): void {
+        for (let field of this.FIELDS) {
+            if (typeof this[field] === "function") {
+                this[field]();
+            }
+        }
     }
 
     name(): this {
@@ -41,8 +50,18 @@ export default class Inserter {
 
     require(): this {
         for (let elem of this.lineArray) {
-            if (elem.includes("require")) {
-                this.dependency["require"] = elem.replace('require: ', "");
+            if (elem.includes("require: ")) {
+                this.dependency["require"] = elem.replace("require: ", "");
+            }
+        }
+
+        return this;
+    }
+
+    github(): this {
+        for (let elem of this.lineArray) {
+            if (elem.includes("github: ")) {
+                this.dependency["github"] = elem.replace("github: ", "").replaceAll("\"", "");
             }
         }
 
