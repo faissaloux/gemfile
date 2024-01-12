@@ -1,6 +1,6 @@
 export default class Inserter {
     readonly VERSION_SYMBOLS: string[] = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
-    readonly FIELDS: string[] = ["name", "version", "require", "github"];
+    readonly FIELDS: string[] = ["name", "version", "require", "github", "branch"];
 
     dependency: {[key: string]: string};
     lineArray: string[];
@@ -62,6 +62,16 @@ export default class Inserter {
         for (let elem of this.lineArray) {
             if (elem.includes("github: ")) {
                 this.dependency["github"] = elem.replace("github: ", "").replaceAll("\"", "");
+            }
+        }
+
+        return this;
+    }
+
+    branch(): this {
+        for (let elem of this.lineArray) {
+            if (elem.includes("branch: ")) {
+                this.dependency["branch"] = elem.replace("branch: ", "").replaceAll("\"", "");
             }
         }
 
