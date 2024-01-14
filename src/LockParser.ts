@@ -1,6 +1,22 @@
 import * as fs from 'fs';
 
 export default class LockParser {
+    content: any = {};
+
+    removePrivateKeys(object: any) {
+        Object.keys(object).forEach((key: any) => {
+            if (typeof object[key] === 'object') {
+                this.removePrivateKeys(object[key]);
+            } else if (key.startsWith("_")) {
+                delete object[key];
+            }
+        });
+    }
+
+    cleanup() {
+        this.removePrivateKeys(this.content);
+    }
+
     parse(file: string): string {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
@@ -9,17 +25,16 @@ export default class LockParser {
         const fileContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
         const lines = fileContent.split(/\r?\n/);
 
-        let object: any = {};
         let parent: string = "";
         let section: string = "";
         let sectionParent: string = "";
         let lastIndentation: number = 0;
 
-        lines.forEach((line: string, index: number) => {
+        lines.forEach((line: string) => {
             if (!line.startsWith(" ")) {
                 if (line.length) {
                     parent = line;
-                    object[parent] = {};
+                    this.content[parent] = {};
                     section = "";
                 }
 
@@ -28,38 +43,40 @@ export default class LockParser {
 
             if (line.endsWith(":")) {
                 section = line.replace(":", "").trim();
-                object[parent][section] = {};
-                object[parent][section]["indentation"] = /[a-z]/i.exec(line)?.index;
+                this.content[parent][section] = {};
+                this.content[parent][section]["_indentation"] = /[a-z]/i.exec(line)?.index;
                 return;
             }
 
             if (line.includes(":")) {
                 [section, line] = line.split(/:(.*)/s);
                 section = section.trim();
-                object[parent][section] = line.trim();
+                this.content[parent][section] = line.trim();
                 return;
             }
 
             if (section != "") {
-                let lineWithoutParentIndentation: string = line.slice(object[parent][section]["indentation"]);
+                let lineWithoutParentIndentation: string = line.slice(this.content[parent][section]["_indentation"]);
                 let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
 
                 if (lastIndentation == 0 || firstCharIndex <= lastIndentation) {
-                    if (object[parent][section][sectionParent] && firstCharIndex > object[parent][section][sectionParent]["indentation"]) {
-                        object[parent][section][sectionParent].push(line.trim());
+                    if (this.content[parent][section][sectionParent] && firstCharIndex > this.content[parent][section][sectionParent]["_indentation"]) {
+                        this.content[parent][section][sectionParent].push(line.trim());
                     } else {
                         sectionParent = lineWithoutParentIndentation.slice(firstCharIndex);
-                        object[parent][section][sectionParent] = [];
-                        object[parent][section][sectionParent]["indentation"] = firstCharIndex;
+                        this.content[parent][section][sectionParent] = [];
+                        this.content[parent][section][sectionParent]["_indentation"] = firstCharIndex;
                     }
-                } else if (firstCharIndex > lastIndentation || object[parent][section][sectionParent].length > 0) {
-                    object[parent][section][sectionParent].push(line.trim());
+                } else if (firstCharIndex > lastIndentation || this.content[parent][section][sectionParent].length > 0) {
+                    this.content[parent][section][sectionParent].push(line.trim());
                 }
 
                 lastIndentation = firstCharIndex;
             }
         });
 
-        return JSON.stringify(object);
+        this.cleanup();
+
+        return JSON.stringify(this.content);
     }
 }
