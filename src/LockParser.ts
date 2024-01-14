@@ -1,8 +1,7 @@
 import * as fs from 'fs';
-import * as util from 'util';
 
 export default class LockParser {
-    parse(file: string): void {
+    parse(file: string): string {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
         }
@@ -18,15 +17,18 @@ export default class LockParser {
 
         lines.forEach((line: string, index: number) => {
             if (!line.startsWith(" ")) {
-                parent = line;
-                object[parent] = [];
-                section = "";
+                if (line.length) {
+                    parent = line;
+                    object[parent] = {};
+                    section = "";
+                }
+
                 return;
             }
 
             if (line.endsWith(":")) {
                 section = line.replace(":", "").trim();
-                object[parent][section] = [];
+                object[parent][section] = {};
                 object[parent][section]["indentation"] = /[a-z]/i.exec(line)?.index;
                 return;
             }
@@ -58,6 +60,6 @@ export default class LockParser {
             }
         });
 
-        console.log(util.inspect(object, true, 10));
+        return JSON.stringify(object);
     }
 }
