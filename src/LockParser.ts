@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 
 export default class LockParser {
-    content: any = {};
+    private content: any = {};
 
-    removePrivateKeys(object: any) {
+    private removePrivateKeys(object: any) {
         Object.keys(object).forEach((key: any) => {
             if (typeof object[key] === 'object') {
                 this.removePrivateKeys(object[key]);
@@ -13,11 +13,11 @@ export default class LockParser {
         });
     }
 
-    cleanup() {
+    private cleanup() {
         this.removePrivateKeys(this.content);
     }
 
-    parse(file: string): string {
+    public parse(file: string): string {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
         }
