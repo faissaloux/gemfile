@@ -2,14 +2,14 @@ import * as fs from 'fs';
 import Inserter from './Inserter';
 
 export default class Parser {
-    content: {[key: string]: Array<{[key: string]: string}>} = {};
-    root: string = "dependencies";
+    private content: {[key: string]: Array<{[key: string]: string}>} = {};
+    private root: string = "dependencies";
     
-    dependencyIsDetected(line: string): boolean {
+    private dependencyIsDetected(line: string): boolean {
         return line.startsWith("gem ");
     }
 
-    parseDependency(line: string): {[key: string]: string} {
+    private parseDependency(line: string): {[key: string]: string} {
         let lineArray: string[] = line.split(",");
         let dependency: {[key: string]: string} = {};
     
@@ -20,7 +20,7 @@ export default class Parser {
         return dependency;
     }
 
-    parse(file: string): string {
+    public parse(file: string): string {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
         }

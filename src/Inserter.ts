@@ -2,15 +2,15 @@ export default class Inserter {
     readonly VERSION_SYMBOLS: string[] = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
     readonly FIELDS: string[] = ["name", "version", "require", "github", "branch"];
 
-    dependency: {[key: string]: string};
-    lineArray: string[];
+    private dependency: {[key: string]: string};
+    private lineArray: string[];
 
     constructor(dependency: {[key: string]: string}, lineArray: string[]) {
         this.dependency = dependency;
         this.lineArray = lineArray;
     }
 
-    insert(): void {
+    public insert(): void {
         for (let field of this.FIELDS) {
             if (typeof this[field] === "function") {
                 this[field]();
@@ -18,13 +18,13 @@ export default class Inserter {
         }
     }
 
-    name(): this {
+    private name(): this {
         this.dependency["name"] = this.lineArray[0].replace("gem", "").replaceAll('"', "").trim();
 
         return this;
     }
 
-    version(): this {
+    private version(): this {
         let versions: string[] = [];
 
         for (let elem of this.lineArray) {
@@ -48,7 +48,7 @@ export default class Inserter {
         return this;
     }
 
-    require(): this {
+    private require(): this {
         for (let elem of this.lineArray) {
             if (elem.includes("require: ")) {
                 this.dependency["require"] = elem.replace("require: ", "");
@@ -58,7 +58,7 @@ export default class Inserter {
         return this;
     }
 
-    github(): this {
+    private github(): this {
         for (let elem of this.lineArray) {
             if (elem.includes("github: ")) {
                 this.dependency["github"] = elem.replace("github: ", "").replaceAll("\"", "");
@@ -68,7 +68,7 @@ export default class Inserter {
         return this;
     }
 
-    branch(): this {
+    private branch(): this {
         for (let elem of this.lineArray) {
             if (elem.includes("branch: ")) {
                 this.dependency["branch"] = elem.replace("branch: ", "").replaceAll("\"", "");
