@@ -2,6 +2,7 @@ import * as fs from 'fs';
 
 export default class LockParser {
     private content: any = {};
+    private originalContent: string = "";
 
     private removePrivateKeys(object: any) {
         Object.keys(object).forEach((key: any) => {
@@ -17,13 +18,24 @@ export default class LockParser {
         this.removePrivateKeys(this.content);
     }
 
-    public parse(file: string): string {
+    public file(file: string): this {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
         }
 
-        const fileContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
-        const lines = fileContent.split(/\r?\n/);
+        this.originalContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
+
+        return this;
+    }
+
+    public text(text: string): this {
+        this.originalContent = text;
+
+        return this;
+    }
+
+    public parse(): string {
+        const lines = this.originalContent.split(/\r?\n/);
 
         let parent: string = "";
         let section: string = "";
