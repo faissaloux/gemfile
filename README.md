@@ -18,6 +18,8 @@ Install `@faissaloux/gemfile` using the package manager you want:
 
 ### Gemfile
 
+You can either parse a whole Gemfile file by passing its name to `file()`.
+
 ```Gemfile
 # Gemfile
 
@@ -33,34 +35,51 @@ import { Parser } from '@faissaloux/gemfile';
 
 const parser = new Parser();
 
-let parsed = parser.parse('Gemfile');
+let parsed = parser.file('Gemfile').parse();
 ```
 
+Or parse Gemfile text by passing it to `text()`.
+```js
+import { Parser } from '@faissaloux/gemfile';
+
+const parser = new Parser();
+
+let parsed = parser.text(`
+    gem "json", ">= 2.0.0", "!=2.7.0", platforms: :windows
+    gem "error_highlight", ">= 0.4.0", platforms: :ruby
+    gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
+`).parse();
+```
 #### Result
 
 ```json
 // console.log(parsed);
 
 {
-    "dependencies":[
-            {
-                "name":"json",
-                "version":">= 2.0.0, != 2.7.0"
-            },
-            {
-                "name":"error_highlight",
-                "version":">= 0.4.0"
-            },
-            {
-                "name":"websocket-client-simple"
-            }
-        ]
+    "dependencies": [
+        {
+            "name": "json",
+            "version": ">= 2.0.0, != 2.7.0"
+        },
+        {
+            "name": "error_highlight",
+            "version": ">= 0.4.0"
+        },
+        {
+            "name": "websocket-client-simple",
+            "require": "false",
+            "github": "matthewd/websocket-client-simple",
+            "branch": "close-race"
+        }
+    ]
 }
 ```
 
 ---
 
 ### Gemfile.lock
+
+You can use `file()` to parse the Gemfile.lock file.
 
 ```Gemfile.lock
 PATH
@@ -94,7 +113,40 @@ import { LockParser } from '@faissaloux/gemfile';
 
 const lockParser = new LockParser();
 
-let parsed = lockParser.parse('Gemfile.lock');
+let parsed = lockParser.file('Gemfile.lock').parse();
+```
+Or you can use `text()` to parse Gemfile.lock content.
+
+```javascript
+import { LockParser } from '@faissaloux/gemfile';
+
+const lockParser = new LockParser();
+
+let parsed = lockParser.text(`PATH
+    remote: .
+    specs:
+    actioncable (7.2.0.alpha)
+        actionpack (= 7.2.0.alpha)
+        activesupport (= 7.2.0.alpha)
+        nio4r (~> 2.0)
+        websocket-driver (>= 0.6.1)
+        zeitwerk (~> 2.6)
+
+GEM
+    remote: https://rubygems.org/
+    specs:
+    addressable (2.8.6)
+        public_suffix (>= 2.0.2, < 6.0)
+    amq-protocol (2.3.2)
+    ast (2.4.2)
+    aws-eventstream (1.3.0)
+    aws-partitions (1.876.0)
+    aws-sdk-core (3.190.1)
+        aws-eventstream (~> 1, >= 1.3.0)
+        aws-partitions (~> 1, >= 1.651.0)
+        aws-sigv4 (~> 1.8)
+        jmespath (~> 1, >= 1.6.1)
+`).parse();
 ```
 
 #### Result

@@ -3,6 +3,7 @@ import Inserter from './Inserter';
 
 export default class Parser {
     private content: {[key: string]: Array<{[key: string]: string}>} = {};
+    private originalContent: string = "";
     private root: string = "dependencies";
     
     private dependencyIsDetected(line: string): boolean {
@@ -20,16 +21,27 @@ export default class Parser {
         return dependency;
     }
 
-    public parse(file: string): string {
+    public file(file: string): this {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
         }
 
-        const fileContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
+        this.originalContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
 
+        return this;
+    }
+
+    public text(text: string): this {
+        this.originalContent = text;
+
+        return this;
+    }
+
+    public parse(): string {
+        const lines = this.originalContent.split(/\r?\n/);
         let dependencies: Array<{[key: string]: string}> = [];
 
-        fileContent.split(/\r?\n/).forEach((line: string) => {
+        lines.forEach((line: string) => {
             line = line.trim();
 
             if (this.dependencyIsDetected(line)) {
