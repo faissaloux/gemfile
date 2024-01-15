@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import Inserter from './Inserter';
+import AbstractParser from './contracts/Parser';
 
-export default class Parser {
-    private content: {[key: string]: Array<{[key: string]: string}>} = {};
-    private originalContent: string = "";
+export default class Parser extends AbstractParser {
+    protected content: {[key: string]: Array<{[key: string]: string}>} = {};
+    protected originalContent: string = "";
     private root: string = "dependencies";
     
     private dependencyIsDetected(line: string): boolean {

@@ -1,8 +1,9 @@
 import * as fs from 'fs';
+import AbstractParser from './contracts/Parser';
 
-export default class LockParser {
-    private content: any = {};
-    private originalContent: string = "";
+export default class LockParser extends AbstractParser {
+    protected content: {[key: string]: any} = {};
+    protected originalContent: string = "";
 
     private removePrivateKeys(object: any) {
         Object.keys(object).forEach((key: any) => {
