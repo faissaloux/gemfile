@@ -1,4 +1,11 @@
-## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.2.0...main)
+## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.3.0...main)
+
+## [v0.3.0](https://github.com/faissaloux/gemfile/compare/v0.2.0...v0.3.0) - 2024-01-15
+### Added
+- Add ability to parse text and file ([#15](https://github.com/faissaloux/gemfile/pull/15))
+
+### Core
+- AbstractParser ([#16](https://github.com/faissaloux/gemfile/pull/16))
 
 ## [v0.2.0](https://github.com/faissaloux/gemfile/compare/v0.1.4...v0.2.0) - 2024-01-14
 ### Added
