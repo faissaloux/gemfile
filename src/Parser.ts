@@ -6,13 +6,17 @@ export default class Parser extends AbstractParser {
     protected content: {[key: string]: Array<{[key: string]: string}>} = {};
     protected originalContent: string = "";
     private root: string = "dependencies";
+    private readonly commasNotBetweenSquareBrackets = /[,]+(?![^[]*\])/g;
     
     private dependencyIsDetected(line: string): boolean {
         return line.startsWith("gem ");
     }
 
     private parseDependency(line: string): {[key: string]: string} {
-        let lineArray: string[] = line.split(",");
+
+        line = line.replaceAll(this.commasNotBetweenSquareBrackets, "|");
+
+        let lineArray: string[] = line.split("|");
         let dependency: {[key: string]: string} = {};
     
         lineArray = lineArray.map(elem => elem.trim());
