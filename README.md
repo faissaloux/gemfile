@@ -23,7 +23,7 @@ You can either parse a whole Gemfile file by passing its name to `file()`.
 ```Gemfile
 # Gemfile
 
-gem "json", ">= 2.0.0", "!=2.7.0", platforms: :windows
+gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
 gem "error_highlight", ">= 0.4.0", platforms: :ruby
 gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
 gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
@@ -46,7 +46,7 @@ import { Parser } from '@faissaloux/gemfile';
 const parser = new Parser();
 
 let parsed = parser.text(`
-    gem "json", ">= 2.0.0", "!=2.7.0", platforms: :windows
+    gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
     gem "error_highlight", ">= 0.4.0", platforms: :ruby
     gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
     gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
@@ -61,11 +61,18 @@ let parsed = parser.text(`
     "dependencies": [
         {
             "name": "json",
-            "version": ">= 2.0.0, != 2.7.0"
+            "version": ">= 2.0.0, != 2.7.0",
+            "platforms": [
+                "windows",
+                "jruby"
+            ]
         },
         {
             "name": "error_highlight",
-            "version": ">= 0.4.0"
+            "version": ">= 0.4.0",
+            "platforms": [
+                "ruby"
+            ]
         },
         {
             "name": "sdoc",
