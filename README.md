@@ -120,6 +120,11 @@ GEM
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
       jmespath (~> 1, >= 1.6.1)
+
+PLATFORMS
+  ruby
+  x86_64-darwin
+  x86_64-linux
 ```
 
 ```javascript
@@ -160,6 +165,11 @@ GEM
         aws-partitions (~> 1, >= 1.651.0)
         aws-sigv4 (~> 1.8)
         jmespath (~> 1, >= 1.6.1)
+
+PLATFORMS
+  ruby
+  x86_64-darwin
+  x86_64-linux
 `).parse();
 ```
 
@@ -197,6 +207,11 @@ GEM
                 "jmespath (~> 1, >= 1.6.1)"
             ]
         }
-    }
+    },
+    "PLATFORMS": [
+        "ruby",
+        "x86_64-darwin",
+        "x86_64-linux"
+    ]
 }
 ```
