@@ -47,7 +47,13 @@ export default class LockParser extends AbstractParser {
             if (!line.startsWith(" ")) {
                 if (line.length) {
                     parent = line;
-                    this.content[parent] = {};
+
+                    if (parent === "PLATFORMS") {
+                        this.content[parent] = [];
+                    } else {
+                        this.content[parent] = {};
+                    }
+
                     section = "";
                 }
 
@@ -66,6 +72,10 @@ export default class LockParser extends AbstractParser {
                 section = section.trim();
                 this.content[parent][section] = line.trim();
                 return;
+            }
+
+            if (section === "") {
+                this.content[parent].push(line.trim());
             }
 
             if (section != "") {
