@@ -75,7 +75,6 @@ export default class LockParser extends AbstractParser {
             }
 
             if (section === "") {
-                console.log(parent);
                 this.content[parent].push(line.trim());
             }
 
