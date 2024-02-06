@@ -48,7 +48,7 @@ export default class LockParser extends AbstractParser {
                 if (line.length) {
                     parent = line;
 
-                    if (parent === "PLATFORMS") {
+                    if (["PLATFORMS", "DEPENDENCIES"].includes(parent)) {
                         this.content[parent] = [];
                     } else {
                         this.content[parent] = {};
@@ -75,6 +75,7 @@ export default class LockParser extends AbstractParser {
             }
 
             if (section === "") {
+                console.log(parent);
                 this.content[parent].push(line.trim());
             }
 
