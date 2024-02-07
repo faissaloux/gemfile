@@ -125,6 +125,10 @@ PLATFORMS
   ruby
   x86_64-darwin
   x86_64-linux
+
+DEPENDENCIES
+  activerecord-jdbcmysql-adapter (>= 1.3.0)
+  aws-sdk-s3
 ```
 
 ```javascript
@@ -170,6 +174,10 @@ PLATFORMS
   ruby
   x86_64-darwin
   x86_64-linux
+
+DEPENDENCIES
+  activerecord-jdbcmysql-adapter (>= 1.3.0)
+  aws-sdk-s3
 `).parse();
 ```
 
@@ -212,6 +220,10 @@ PLATFORMS
         "ruby",
         "x86_64-darwin",
         "x86_64-linux"
+    ],
+    "DEPENDENCIES": [
+        "activerecord-jdbcmysql-adapter (>= 1.3.0)",
+        "aws-sdk-s3"
     ]
 }
 ```
