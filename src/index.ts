@@ -4,4 +4,4 @@ import LockParser from './LockParser';
 export {
     Parser,
     LockParser,
-}
+};

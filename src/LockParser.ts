@@ -78,11 +78,11 @@ export default class LockParser extends AbstractParser {
                 this.content[parent].push(line.trim());
             }
 
-            if (section != "") {
+            if (section !== "") {
                 let lineWithoutParentIndentation: string = line.slice(this.content[parent][section]["_indentation"]);
                 let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
 
-                if (lastIndentation == 0 || firstCharIndex <= lastIndentation) {
+                if (lastIndentation === 0 || firstCharIndex <= lastIndentation) {
                     if (this.content[parent][section][sectionParent] && firstCharIndex > this.content[parent][section][sectionParent]["_indentation"]) {
                         this.content[parent][section][sectionParent].push(line.trim());
                     } else {
