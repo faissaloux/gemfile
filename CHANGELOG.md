@@ -1,4 +1,12 @@
-## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.3.0...main)
+## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.4.0...main)
+
+## [v0.4.0](https://github.com/faissaloux/gemfile/compare/v0.3.0...v0.4.0) - 2024-02-10
+### Added
+- Linter ([#21](https://github.com/faissaloux/gemfile/pull/21))
+- Support lockfile DEPENDENCIES ([#20](https://github.com/faissaloux/gemfile/pull/20))
+- Support lockfile PLATFORMS ([#19](https://github.com/faissaloux/gemfile/pull/19))
+- Support platforms field ([#18](https://github.com/faissaloux/gemfile/pull/18))
+- Support git field ([#17](https://github.com/faissaloux/gemfile/pull/17))
 
 ## [v0.3.0](https://github.com/faissaloux/gemfile/compare/v0.2.0...v0.3.0) - 2024-01-15
 ### Added
