@@ -1,4 +1,8 @@
-## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.4.0...main)
+## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.4.1...main)
+
+## [v0.4.1](https://github.com/faissaloux/gemfile/compare/v0.4.0...v0.4.1) - 2024-03-11
+### Fixed
+- Fix husky call ([#23](https://github.com/faissaloux/gemfile/pull/23))
 
 ## [v0.4.0](https://github.com/faissaloux/gemfile/compare/v0.3.0...v0.4.0) - 2024-02-10
 ### Added
