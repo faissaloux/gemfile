@@ -48,7 +48,7 @@ export default class LockParser extends AbstractParser {
                 if (line.length) {
                     parent = line;
 
-                    if (["PLATFORMS", "DEPENDENCIES"].includes(parent)) {
+                    if (["PLATFORMS", "DEPENDENCIES", "BUNDLED WITH"].includes(parent)) {
                         this.content[parent] = [];
                     } else {
                         this.content[parent] = {};
