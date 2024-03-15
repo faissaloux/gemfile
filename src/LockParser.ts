@@ -6,20 +6,6 @@ export default class LockParser extends AbstractParser {
     protected originalContent: string = "";
     private bloc: {[key: string]: any} = {};
 
-    private removePrivateKeys(object: any) {
-        Object.keys(object).forEach((key: any) => {
-            if (typeof object[key] === 'object') {
-                this.removePrivateKeys(object[key]);
-            } else if (key.startsWith("_")) {
-                delete object[key];
-            }
-        });
-    }
-
-    private cleanup() {
-        this.removePrivateKeys(this.content);
-    }
-
     public file(file: string): this {
         if (!fs.existsSync(file)) {
             throw new Error(`${file} doesn't exist!`);
@@ -107,5 +93,30 @@ export default class LockParser extends AbstractParser {
         this.cleanup();
 
         return JSON.stringify(this.content);
+    }
+
+    private removePrivateKeys(object: any) {
+        Object.keys(object).forEach((key: any) => {
+            if (typeof object[key] === 'object') {
+                this.removePrivateKeys(object[key]);
+            } else if (key.startsWith("_")) {
+                delete object[key];
+            }
+        });
+    }
+
+    private simplifyStructure() {
+        const ignore: string[] = ["PLATFORMS"];
+
+        Object.keys(this.content).forEach((key: string) => {
+            if (!ignore.includes(key) && this.content[key].length === 1) {
+                this.content[key] = this.content[key][0];
+            }
+        });
+    }
+
+    private cleanup() {
+        this.removePrivateKeys(this.content);
+        this.simplifyStructure();
     }
 }
