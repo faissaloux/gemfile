@@ -4,6 +4,7 @@ import AbstractParser from './contracts/Parser';
 export default class LockParser extends AbstractParser {
     protected content: {[key: string]: any} = {};
     protected originalContent: string = "";
+    private bloc: {[key: string]: any} = {};
 
     private removePrivateKeys(object: any) {
         Object.keys(object).forEach((key: any) => {
@@ -44,14 +45,19 @@ export default class LockParser extends AbstractParser {
         let lastIndentation: number = 0;
 
         lines.forEach((line: string) => {
+            if (line === "") {
+                if (Object.keys(this.bloc).length !== 0) {
+                    this.content[parent].push(this.bloc);
+                    this.bloc = {};
+                }
+            }
+
             if (!line.startsWith(" ")) {
                 if (line.length) {
                     parent = line;
 
-                    if (["PLATFORMS", "DEPENDENCIES", "BUNDLED WITH"].includes(parent)) {
+                    if (! this.content.hasOwnProperty(parent)) {
                         this.content[parent] = [];
-                    } else {
-                        this.content[parent] = {};
                     }
 
                     section = "";
@@ -62,15 +68,15 @@ export default class LockParser extends AbstractParser {
 
             if (line.endsWith(":")) {
                 section = line.replace(":", "").trim();
-                this.content[parent][section] = {};
-                this.content[parent][section]["_indentation"] = /[a-z]/i.exec(line)?.index;
+                this.bloc[section] = {};
+                this.bloc[section]["_indentation"] = /[a-z]/i.exec(line)?.index;
                 return;
             }
 
             if (line.includes(":")) {
                 [section, line] = line.split(/:(.*)/s);
                 section = section.trim();
-                this.content[parent][section] = line.trim();
+                this.bloc[section] = line.trim();
                 return;
             }
 
@@ -79,19 +85,19 @@ export default class LockParser extends AbstractParser {
             }
 
             if (section !== "") {
-                let lineWithoutParentIndentation: string = line.slice(this.content[parent][section]["_indentation"]);
+                let lineWithoutParentIndentation: string = line.slice(this.bloc[section]["_indentation"]);
                 let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
 
                 if (lastIndentation === 0 || firstCharIndex <= lastIndentation) {
-                    if (this.content[parent][section][sectionParent] && firstCharIndex > this.content[parent][section][sectionParent]["_indentation"]) {
-                        this.content[parent][section][sectionParent].push(line.trim());
+                    if (this.bloc[section][sectionParent] && firstCharIndex > this.bloc[section][sectionParent]["_indentation"]) {
+                        this.bloc[section][sectionParent].push(line.trim());
                     } else {
                         sectionParent = lineWithoutParentIndentation.slice(firstCharIndex);
-                        this.content[parent][section][sectionParent] = [];
-                        this.content[parent][section][sectionParent]["_indentation"] = firstCharIndex;
+                        this.bloc[section][sectionParent] = [];
+                        this.bloc[section][sectionParent]["_indentation"] = firstCharIndex;
                     }
-                } else if (firstCharIndex > lastIndentation || this.content[parent][section][sectionParent].length > 0) {
-                    this.content[parent][section][sectionParent].push(line.trim());
+                } else if (firstCharIndex > lastIndentation || this.bloc[section][sectionParent].length > 0) {
+                    this.bloc[section][sectionParent].push(line.trim());
                 }
 
                 lastIndentation = firstCharIndex;
