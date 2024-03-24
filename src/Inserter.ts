@@ -12,7 +12,9 @@ export default class Inserter {
 
     public insert(): void {
         for (let field of this.FIELDS) {
+            // @ts-ignore
             if (typeof this[field] === "function") {
+                // @ts-ignore
                 this[field]();
             }
         }
