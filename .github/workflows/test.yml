@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - tests
   pull_request:
 
 jobs:
@@ -18,6 +17,15 @@ jobs:
     name: Node ${{ matrix.node }} - ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Run Jest
-        uses: stefanoeb/jest-action@1.0.3
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Test
+        run: yarn test
