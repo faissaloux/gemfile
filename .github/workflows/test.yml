@@ -1,16 +1,23 @@
 name: Tests
 
 on:
-    push:
-      branches:
-        - main
-        - tests
-    pull_request:
+  push:
+    branches:
+      - main
+      - tests
+  pull_request:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node: [ 20.x ]
+
+    name: Node ${{ matrix.node }} - ${{ matrix.os }}
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Run Jest
-      uses: stefanoeb/jest-action@1.0.3
+      - uses: actions/checkout@v1
+      - name: Run Jest
+        uses: stefanoeb/jest-action@1.0.3
