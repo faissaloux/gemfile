@@ -4,8 +4,6 @@ describe('parser', () => {
   const parser = new Parser();
 
   describe('text parser', () => {
-    const parser = new Parser();
-
     test('parse one line contains dependency name', () => {
       let parsed = parser.text(`
         gem "error_highlight"
