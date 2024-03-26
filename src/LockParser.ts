@@ -31,7 +31,7 @@ export default class LockParser extends AbstractParser {
         let lastIndentation: number = 0;
 
         lines.forEach((line: string) => {
-            if (line === "") {
+            if (line.trim() === "") {
                 if (Object.keys(this.bloc).length !== 0) {
                     this.content[parent].push(this.bloc);
                     this.bloc = {};
@@ -72,22 +72,24 @@ export default class LockParser extends AbstractParser {
                 return;
             }
 
-            let lineWithoutParentIndentation: string = line.slice(this.bloc[section]["_indentation"]);
-            let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
-
-            if (lastIndentation === 0 || firstCharIndex <= lastIndentation) {
-                if (this.bloc[section][sectionParent] && firstCharIndex > this.bloc[section][sectionParent]["_indentation"]) {
+            if (line.trim() !== "") {
+                let lineWithoutParentIndentation: string = line.slice(this.bloc[section]["_indentation"]);
+                let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
+    
+                if (lastIndentation === 0 || firstCharIndex <= lastIndentation) {
+                    if (this.bloc[section][sectionParent] && firstCharIndex > this.bloc[section][sectionParent]["_indentation"]) {
+                        this.bloc[section][sectionParent].push(line.trim());
+                    } else {
+                        sectionParent = lineWithoutParentIndentation.slice(firstCharIndex);
+                        this.bloc[section][sectionParent] = [];
+                        this.bloc[section][sectionParent]["_indentation"] = firstCharIndex;
+                    }
+                } else if (firstCharIndex > lastIndentation || this.bloc[section][sectionParent].length > 0) {
                     this.bloc[section][sectionParent].push(line.trim());
-                } else {
-                    sectionParent = lineWithoutParentIndentation.slice(firstCharIndex);
-                    this.bloc[section][sectionParent] = [];
-                    this.bloc[section][sectionParent]["_indentation"] = firstCharIndex;
                 }
-            } else if (firstCharIndex > lastIndentation || this.bloc[section][sectionParent].length > 0) {
-                this.bloc[section][sectionParent].push(line.trim());
+    
+                lastIndentation = firstCharIndex;
             }
-
-            lastIndentation = firstCharIndex;
         });
 
         this.cleanup();

@@ -84,6 +84,31 @@ GIT
             expect(parsed).toBe(`{"GIT":[{"remote":"https://github.com/matthewd/websocket-client-simple.git","revision":"e161305f1a466b9398d86df3b1731b03362da91b","branch":"close-race","specs":{"websocket-client-simple (0.3.0)":[],"event_emitter":[],"websocket":[]}},{"remote":"https://github.com/rails/sdoc.git","revision":"08b4252b1f5d185890562f4106d24f3afa944e40","branch":"main","specs":{"sdoc (3.0.0.alpha)":[],"nokogiri":[],"rdoc (>= 5.0)":[],"rouge":[]}}]}`);
         });
 
+        test('parse multiple sections with same name with whitespace in empty line', () => {
+            const parser = new LockParser();
+            let parsed = parser.text(`GIT
+    remote: https://github.com/matthewd/websocket-client-simple.git
+    revision: e161305f1a466b9398d86df3b1731b03362da91b
+    branch: close-race
+    specs:
+        websocket-client-simple (0.3.0)
+        event_emitter
+        websocket
+
+GIT
+    remote: https://github.com/rails/sdoc.git
+    revision: 08b4252b1f5d185890562f4106d24f3afa944e40
+    branch: main
+    specs:
+        sdoc (3.0.0.alpha)
+        nokogiri
+        rdoc (>= 5.0)
+        rouge
+`).parse();
+
+            expect(parsed).toBe(`{"GIT":[{"remote":"https://github.com/matthewd/websocket-client-simple.git","revision":"e161305f1a466b9398d86df3b1731b03362da91b","branch":"close-race","specs":{"websocket-client-simple (0.3.0)":[],"event_emitter":[],"websocket":[]}},{"remote":"https://github.com/rails/sdoc.git","revision":"08b4252b1f5d185890562f4106d24f3afa944e40","branch":"main","specs":{"sdoc (3.0.0.alpha)":[],"nokogiri":[],"rdoc (>= 5.0)":[],"rouge":[]}}]}`);
+        });
+
         test('parse DEPENDENCIES section', () => {
             const parser = new LockParser();
             let parsed = parser.text(`
