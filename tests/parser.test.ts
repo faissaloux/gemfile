@@ -9,6 +9,7 @@ describe('parser', () => {
         gem "error_highlight"
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"error_highlight"}]}`);
     });
 
@@ -17,6 +18,7 @@ describe('parser', () => {
         gem "error_highlight", ">= 0.4.0"
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"error_highlight","version":">= 0.4.0"}]}`);
     });
 
@@ -25,6 +27,7 @@ describe('parser', () => {
         gem "json", ">= 2.0.0", "!=2.7.0"
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0"}]}`);
     });
 
@@ -33,6 +36,7 @@ describe('parser', () => {
         gem "error_highlight", ">= 0.4.0", platforms: :ruby
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"error_highlight","version":">= 0.4.0","platforms":["ruby"]}]}`);
     });
 
@@ -41,6 +45,7 @@ describe('parser', () => {
         gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0","platforms":["windows","jruby"]}]}`);
     });
 
@@ -49,6 +54,7 @@ describe('parser', () => {
         gem "sdoc", git: "https://github.com/rails/sdoc.git"
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"sdoc","git":"https://github.com/rails/sdoc.git"}]}`);
     });
 
@@ -57,6 +63,7 @@ describe('parser', () => {
         gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"sdoc","git":"https://github.com/rails/sdoc.git","branch":"main"}]}`);
     });
 
@@ -65,6 +72,7 @@ describe('parser', () => {
         gem "sdoc", require: false
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"sdoc","require":"false"}]}`);
     });
 
@@ -76,6 +84,7 @@ describe('parser', () => {
           gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
       `).parse();
 
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0","platforms":["windows","jruby"]},{"name":"error_highlight","version":">= 0.4.0","platforms":["ruby"]},{"name":"sdoc","git":"https://github.com/rails/sdoc.git","branch":"main"},{"name":"websocket-client-simple","require":"false","github":"matthewd/websocket-client-simple","branch":"close-race"}]}`);
     });
   });
@@ -84,6 +93,7 @@ describe('parser', () => {
     test('parse', () => {
       let parsed = parser.file('tests/files/Gemfile').parse();
   
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0","platforms":["windows","jruby"]},{"name":"error_highlight","version":">= 0.4.0","platforms":["ruby"]},{"name":"sdoc","git":"https://github.com/rails/sdoc.git","branch":"main"},{"name":"websocket-client-simple","require":"false","github":"matthewd/websocket-client-simple","branch":"close-race"}]}`);
     });
   });
