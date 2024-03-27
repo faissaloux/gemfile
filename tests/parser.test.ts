@@ -82,7 +82,7 @@ describe('parser', () => {
 
   describe('file parser', () => {
     test('parse', () => {
-      let parsed = parser.file('tests/files/gemfile').parse();
+      let parsed = parser.file('tests/files/Gemfile').parse();
   
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0","platforms":["windows","jruby"]},{"name":"error_highlight","version":">= 0.4.0","platforms":["ruby"]},{"name":"sdoc","git":"https://github.com/rails/sdoc.git","branch":"main"},{"name":"websocket-client-simple","require":"false","github":"matthewd/websocket-client-simple","branch":"close-race"}]}`);
     });
