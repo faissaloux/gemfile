@@ -29,6 +29,12 @@ Run all tests:
 yarn test
 ```
 
+## Test Coverage
+Check test coverage:
+```bash
+yarn test-cov
+```
+
 ## Lint
 ```bash
 yarn lint
