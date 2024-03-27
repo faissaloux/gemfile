@@ -32,6 +32,5 @@ jobs:
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4.0.1
-        with:
+        env:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: faissaloux/gemfile
