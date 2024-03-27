@@ -214,14 +214,13 @@ DEPENDENCIES
   });
 
     describe('file parser', () => {
-        test('unexisted file', () => {
-            const parser = new LockParser();
+        const parser = new LockParser();
 
+        test('unexisted file', () => {
             expect(() => parser.file('tests/files/unexisted').parse()).toThrow(Error);
         });
 
         test('parse', () => {
-            const parser = new LockParser();
             let parsed = parser.file('tests/files/Gemfile.lock').parse();
 
             expect(() => JSON.parse(parsed)).not.toThrow(Error);
