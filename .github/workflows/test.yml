@@ -1,4 +1,4 @@
-name: Lint
+name: Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -27,5 +27,11 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Lint
-        run: yarn lint
+      - name: Test
+        run: yarn test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: faissaloux/gemfile
