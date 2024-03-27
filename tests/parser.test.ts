@@ -90,6 +90,10 @@ describe('parser', () => {
   });
 
   describe('file parser', () => {
+    test('unexisted file', () => {
+      expect(() => parser.file('tests/files/unexisted').parse()).toThrow(Error);
+    });
+
     test('parse', () => {
       let parsed = parser.file('tests/files/Gemfile').parse();
   
