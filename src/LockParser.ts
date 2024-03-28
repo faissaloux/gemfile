@@ -1,26 +1,9 @@
-import * as fs from 'fs';
 import AbstractParser from './contracts/Parser';
 
 export default class LockParser extends AbstractParser {
     protected content: {[key: string]: any} = {};
     protected originalContent: string = "";
     private bloc: {[key: string]: any} = {};
-
-    public file(file: string): this {
-        if (!fs.existsSync(file)) {
-            throw new Error(`${file} doesn't exist!`);
-        }
-
-        this.originalContent = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' });
-
-        return this;
-    }
-
-    public text(text: string): this {
-        this.originalContent = text;
-
-        return this;
-    }
 
     public parse(): string {
         const lines = this.originalContent.split(/\r?\n/);
