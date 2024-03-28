@@ -1,4 +1,15 @@
-## [Unreleased](https://github.com/faissaloux/gemfile/compare/v0.4.1...main)
+## [Unreleased](https://github.com/faissaloux/gemfile/compare/v1.0.0...main)
+
+## [v1.0.0](https://github.com/faissaloux/gemfile/compare/v0.4.1...v1.0.0) - 2024-03-28
+### Added
+- Fix codecov ([#31](https://github.com/faissaloux/gemfile/pull/31))
+- Tests ([#30](https://github.com/faissaloux/gemfile/pull/30))
+- CONTRIBUTING ([#29](https://github.com/faissaloux/gemfile/pull/29))
+- Support Lock file multiple sections with same title ([#28](https://github.com/faissaloux/gemfile/pull/28))
+- Support BUNDLED WITH ([#26](https://github.com/faissaloux/gemfile/pull/26))
+
+### Refactor
+- Refactor classes methods ([#32](https://github.com/faissaloux/gemfile/pull/32))
 
 ## [v0.4.1](https://github.com/faissaloux/gemfile/compare/v0.4.0...v0.4.1) - 2024-03-11
 ### Fixed
