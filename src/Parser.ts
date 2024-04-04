@@ -6,6 +6,20 @@ export default class Parser extends AbstractParser {
     protected originalContent: string = "";
     private root: string = "dependencies";
     private readonly COMMAS_NOT_BETWEEN_SQUARE_BRACKETS = /[,]+(?![^[]*\])/g;
+    private static filter: string[] = [];
+
+    constructor() {
+        super();
+        Parser.filter = [];
+    }
+
+    public static only(element: string) {
+        if (element === "name") {
+            element = "gem";
+        }
+
+        Parser.filter.push(element);
+    }
 
     public parse(): string {
         const lines = this.originalContent.split(/\r?\n/);
@@ -16,7 +30,9 @@ export default class Parser extends AbstractParser {
 
             if (this.dependencyIsDetected(line)) {
                 let dependency = this.parseDependency(line);
-                dependencies.push(dependency);
+                if (Object.keys(dependency).length > 0) {
+                    dependencies.push(dependency);
+                }
             }
         });
 
@@ -30,15 +46,28 @@ export default class Parser extends AbstractParser {
     }
 
     private parseDependency(line: string): {[key: string]: string} {
-
         line = line.replaceAll(this.COMMAS_NOT_BETWEEN_SQUARE_BRACKETS, "|");
 
         let lineArray: string[] = line.split("|");
         let dependency: {[key: string]: string} = {};
+
+        if (Parser.filter.length > 0) {
+            lineArray = lineArray.filter(function(elem) {
+                for(let elemToReturn of Parser.filter) {
+                    if(elem.trim().startsWith(elemToReturn)) {
+                        return true;
+                    }
+                }
     
+                return false;
+            });
+        }
+
         lineArray = lineArray.map(elem => elem.trim());
 
-        new Inserter(dependency, lineArray).insert();
+        if (lineArray.length > 0) {
+            new Inserter(dependency, lineArray).only(Parser.filter).insert();
+        }
 
         return dependency;
     }

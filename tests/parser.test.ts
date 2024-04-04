@@ -1,9 +1,9 @@
 import Parser from '../src/Parser';
 
 describe('parser', () => {
-  const parser = new Parser();
-
   describe('text parser', () => {
+    const parser = new Parser();
+
     test('parse one line contains dependency name', () => {
       let parsed = parser.text(`
         gem "error_highlight"
@@ -90,6 +90,8 @@ describe('parser', () => {
   });
 
   describe('file parser', () => {
+    const parser = new Parser();
+
     test('unexisted file', () => {
       expect(() => parser.file('tests/files/unexisted').parse()).toThrow(Error);
     });
@@ -99,6 +101,50 @@ describe('parser', () => {
   
       expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","version":">= 2.0.0, != 2.7.0","platforms":["windows","jruby"]},{"name":"error_highlight","version":">= 0.4.0","platforms":["ruby"]},{"name":"sdoc","git":"https://github.com/rails/sdoc.git","branch":"main"},{"name":"websocket-client-simple","require":"false","github":"matthewd/websocket-client-simple","branch":"close-race"}]}`);
+    });
+  });
+
+  describe('only', () => {
+    test('parse one line specifying one element to return', () => {
+      const parser = new Parser();
+      Parser.only("name");
+
+      let parsed = parser.text(`
+        gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
+      `).parse();
+
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
+      expect(parsed).toBe(`{"dependencies":[{"name":"sdoc"}]}`);
+    });
+
+    test('parse multiple lines specifying one element to return', () => {
+      const parser = new Parser();
+      Parser.only("name");
+
+      let parsed = parser.text(`
+        gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
+        gem "error_highlight", ">= 0.4.0", platforms: :ruby
+        gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
+        gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
+      `).parse();
+
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
+      expect(parsed).toBe(`{"dependencies":[{"name":"json"},{"name":"error_highlight"},{"name":"sdoc"},{"name":"websocket-client-simple"}]}`);
+    });
+
+    test('parse multiple lines specifying one element to return that does not exist in all lines', () => {
+      const parser = new Parser();
+      Parser.only("platforms");
+
+      let parsed = parser.text(`
+        gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
+        gem "error_highlight", ">= 0.4.0", platforms: :ruby
+        gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
+        gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
+      `).parse();
+
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
+      expect(parsed).toBe(`{"dependencies":[{"platforms":["windows","jruby"]},{"platforms":["ruby"]}]}`);
     });
   });
 });

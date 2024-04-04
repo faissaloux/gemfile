@@ -1,27 +1,34 @@
 export default class Inserter {
     readonly VERSION_SYMBOLS: string[] = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
-    readonly FIELDS: string[] = ["name", "version", "require", "github", "git", "branch", "platforms"];
+    readonly FIELDS: string[] = ["gem", "version", "require", "github", "git", "branch", "platforms"];
 
     private dependency: {[key: string]: string|string[]};
     private lineArray: string[];
+    private filter: string[] = [];
 
     constructor(dependency: {[key: string]: string}, lineArray: string[]) {
         this.dependency = dependency;
         this.lineArray = lineArray;
     }
 
+    public only(elements: string[]): this {
+        this.filter = elements;
+
+        return this;
+    }
+
     public insert(): void {
         for (let field of this.FIELDS) {
             // @ts-ignore
-            if (typeof this[field] === "function") {
+            if (typeof this[field] === "function" && this.filter.includes(field)) {
                 // @ts-ignore
                 this[field]();
             }
         }
     }
 
-    private name(): this {
-        this.dependency["name"] = this.lineArray[0].replace("gem", "").replaceAll('"', "").trim();
+    private gem(): this {
+        this.dependency["name"] = this.lineArray[0]?.replace("gem", "").replaceAll('"', "").trim();
 
         return this;
     }
