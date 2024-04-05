@@ -7,13 +7,20 @@ export default class Parser extends AbstractParser {
     private root: string = "dependencies";
     private readonly COMMAS_NOT_BETWEEN_SQUARE_BRACKETS = /[,]+(?![^[]*\])/g;
     private static filter: string[] = [];
+    private static filterMode: string = "default";
 
     constructor() {
         super();
-        Parser.filter = [];
+        Parser.filterMode = "default";
+        Parser.filter = ["gem", "version", "require", "github", "git", "branch", "platforms"];
     }
 
     public static only(element: string) {
+        if (Parser.filterMode === "default") {
+            Parser.filter = [];
+            Parser.filterMode = "only";
+        }
+
         if (element === "name") {
             element = "gem";
         }
