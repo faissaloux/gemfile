@@ -1,5 +1,6 @@
+import Version from './elements/Version';
+
 export default class Inserter {
-    readonly VERSION_SYMBOLS: string[] = [ "<", "<=", "=", "!=", ">", ">=", "~>" ];
     readonly FIELDS: string[] = ["gem", "version", "require", "github", "git", "branch", "platforms"];
 
     private dependency: {[key: string]: string|string[]};
@@ -43,7 +44,7 @@ export default class Inserter {
                 elem = elem.slice(0, hasDigit["index"]) + " " + elem.slice(hasDigit["index"]);
             }
 
-            for (let symbol of this.VERSION_SYMBOLS) {
+            for (let symbol of Version.VERSION_SYMBOLS) {
                 if (elem.includes("\"" + symbol + " ")) {
                     versions.push(elem.replaceAll('"', ''));
                 }

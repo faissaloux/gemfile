@@ -1,3 +1,4 @@
+import Version from './elements/Version';
 import Inserter from './Inserter';
 import AbstractParser from './contracts/Parser';
 
@@ -57,18 +58,23 @@ export default class Parser extends AbstractParser {
 
         let lineArray: string[] = line.split("|");
         let dependency: {[key: string]: string} = {};
+        let self = this;
 
-        if (Parser.filter.length > 0) {
-            lineArray = lineArray.filter(function(elem) {
-                for(let elemToReturn of Parser.filter) {
-                    if(elem.trim().startsWith(elemToReturn)) {
-                        return true;
-                    }
+        lineArray = lineArray.filter(function(elem) {
+            for (let symbol of Version.VERSION_SYMBOLS) {
+                if (elem.replace(/^\s"+/, '').startsWith(symbol)) {
+                    return true;
                 }
-    
-                return false;
-            });
-        }
+            }
+
+            for(let elemToReturn of Parser.filter) {
+                if(elem.trim().startsWith(elemToReturn)) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
 
         lineArray = lineArray.map(elem => elem.trim());
 
