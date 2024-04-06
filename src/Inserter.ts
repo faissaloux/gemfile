@@ -1,11 +1,11 @@
 import Version from './elements/Version';
 
 export default class Inserter {
-    readonly FIELDS: string[] = ["gem", "version", "require", "github", "git", "branch", "platforms"];
+    readonly ELEMENTS: string[] = ["gem", "version", "require", "github", "git", "branch", "platforms"];
 
     private dependency: {[key: string]: string|string[]};
     private lineArray: string[];
-    private filter: string[] = [];
+    private filter: string[] = this.ELEMENTS;
 
     constructor(dependency: {[key: string]: string}, lineArray: string[]) {
         this.dependency = dependency;
@@ -19,7 +19,7 @@ export default class Inserter {
     }
 
     public insert(): void {
-        for (let field of this.FIELDS) {
+        for (let field of this.ELEMENTS) {
             // @ts-ignore
             if (typeof this[field] === "function" && this.filter.includes(field)) {
                 // @ts-ignore

@@ -1,6 +1,14 @@
 import Inserter from '../src/Inserter';
 
 describe('inserter', () => {
+    test('elements', () => {
+        let dependency: {[key: string]: string} = {};
+
+        let inserter = new Inserter(dependency, []);
+
+        expect(inserter.ELEMENTS).toStrictEqual(["gem", "version", "require", "github", "git", "branch", "platforms"]);
+    });
+
     test('insert one line contains name', () => {
         let dependency: {[key: string]: string} = {};
 
