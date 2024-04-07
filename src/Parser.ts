@@ -28,9 +28,7 @@ export default class Parser extends AbstractParser {
             }
         }
 
-        for (let element of elements) {
-            Parser.filter.push(element);
-        }
+        Parser.filter = [...new Set(Parser.filter.concat(elements))];
     }
 
     public parse(): string {
