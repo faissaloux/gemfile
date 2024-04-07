@@ -60,7 +60,6 @@ export default class Parser extends AbstractParser {
 
         let lineArray: string[] = line.split("|");
         let dependency: {[key: string]: string} = {};
-        let self = this;
 
         lineArray = lineArray.filter(function(elem) {
             for (let symbol of Version.VERSION_SYMBOLS) {

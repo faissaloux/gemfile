@@ -32,7 +32,8 @@
         "eqeqeq": "error",
         "no-throw-literal": "error",
         "semi": "off",
-        "no-console": "error"
+        "no-console": "error",
+        "no-unused-vars": "error"
     },
     "ignorePatterns": [
         "out",
