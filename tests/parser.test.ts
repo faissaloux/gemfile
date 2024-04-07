@@ -146,5 +146,21 @@ describe('parser', () => {
       expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"platforms":["windows","jruby"]},{"platforms":["ruby"]}]}`);
     });
+
+    test('parse multiple lines specifying multiple elements to return', () => {
+      const parser = new Parser();
+      Parser.only("platforms");
+      Parser.only("name");
+
+      let parsed = parser.text(`
+        gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
+        gem "error_highlight", ">= 0.4.0", platforms: :ruby
+        gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
+        gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
+      `).parse();
+
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
+      expect(parsed).toBe(`{"dependencies":[{"name":"json","platforms":["windows","jruby"]},{"name":"error_highlight","platforms":["ruby"]},{"name":"sdoc"},{"name":"websocket-client-simple"}]}`);
+    });
   });
 });
