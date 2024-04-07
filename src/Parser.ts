@@ -16,17 +16,21 @@ export default class Parser extends AbstractParser {
         Parser.filter = ["gem", "version", "require", "github", "git", "branch", "platforms"];
     }
 
-    public static only(element: string) {
+    public static only(...elements: string[]) {
         if (Parser.filterMode === "default") {
             Parser.filter = [];
             Parser.filterMode = "only";
         }
 
-        if (element === "name") {
-            element = "gem";
+        for (let index in elements) {
+            if (elements[index] === "name") {
+                elements[index] = "gem";
+            }
         }
 
-        Parser.filter.push(element);
+        for (let element of elements) {
+            Parser.filter.push(element);
+        }
     }
 
     public parse(): string {
