@@ -21,11 +21,13 @@ export default class Parser extends AbstractParser {
             Parser.filterMode = "only";
         }
 
-        for (let index in elements) {
-            if (elements[index] === "name") {
-                elements[index] = "gem";
+        elements = elements.map(element => {
+            if (element === "name") {
+                element = "gem";
             }
-        }
+
+            return element;
+        });
 
         Parser.filter = [...new Set(Parser.filter.concat(elements))];
     }
