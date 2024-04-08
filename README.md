@@ -14,6 +14,12 @@ Install `@faissaloux/gemfile` using the package manager you want:
 
 ## Usage
 
+- [`Gemfile`](#gemfile-1)
+- [`Gemfile.lock`](#gemfilelock)
+- [`only`](#only)
+
+---
+
 `@faissaloux/gemfile` can parse both `Gemfile` and `Gemfile.lock`.
 
 ### Gemfile
