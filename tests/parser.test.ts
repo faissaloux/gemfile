@@ -227,5 +227,15 @@ describe('parser', () => {
       expect(() => JSON.parse(parsed)).not.toThrow(Error);
       expect(parsed).toBe(`{"dependencies":[{"name":"json","platforms":["windows","jruby"]},{"name":"error_highlight","platforms":["ruby"]},{"name":"sdoc","branch":"main"},{"name":"websocket-client-simple","branch":"close-race"}]}`);
     });
+
+    test('parse file with filter elements', () => {      
+      Parser.only("name");
+
+      const parser = new Parser();
+      let parsed = parser.file('tests/files/Gemfile').parse();
+  
+      expect(() => JSON.parse(parsed)).not.toThrow(Error);
+      expect(parsed).toBe(`{"dependencies":[{"name":"json"},{"name":"error_highlight"},{"name":"sdoc"},{"name":"websocket-client-simple"}]}`);
+    });
   });
 });
