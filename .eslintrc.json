@@ -31,7 +31,9 @@
         "curly": "error",
         "eqeqeq": "error",
         "no-throw-literal": "error",
-        "semi": "off"
+        "semi": "off",
+        "no-console": "error",
+        "no-unused-vars": "error"
     },
     "ignorePatterns": [
         "out",

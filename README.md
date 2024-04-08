@@ -14,6 +14,12 @@ Install `@faissaloux/gemfile` using the package manager you want:
 
 ## Usage
 
+- [`Gemfile`](#gemfile-1)
+- [`Gemfile.lock`](#gemfilelock)
+- [`only`](#only)
+
+---
+
 `@faissaloux/gemfile` can parse both `Gemfile` and `Gemfile.lock`.
 
 ### Gemfile
@@ -224,6 +230,55 @@ DEPENDENCIES
     "DEPENDENCIES": [
         "activerecord-jdbcmysql-adapter (>= 1.3.0)",
         "aws-sdk-s3"
+    ]
+}
+```
+
+### Only
+You can choose which elements to return using `only()`.
+
+```javascript
+Parser.only("name", "platforms");
+```
+
+```javascript
+import { Parser } from '@faissaloux/gemfile';
+
+Parser.only("name", "platforms");
+
+const parser = new Parser();
+let parsed = parser.text(`
+    gem "json", ">= 2.0.0", "!=2.7.0", platforms: [:windows, :jruby]
+    gem "error_highlight", ">= 0.4.0", platforms: :ruby
+    gem "sdoc", git: "https://github.com/rails/sdoc.git", branch: "main"
+    gem "websocket-client-simple", github: "matthewd/websocket-client-simple", branch: "close-race", require: false
+`).parse();
+```
+
+```json
+// console.log(parsed);
+
+{
+    "dependencies": [
+        {
+            "name": "json",
+            "platforms": [
+                "windows",
+                "jruby"
+            ]
+        },
+        {
+            "name": "error_highlight",
+            "platforms": [
+                "ruby"
+            ]
+        },
+        {
+            "name": "sdoc"
+        },
+        {
+            "name": "websocket-client-simple"
+        }
     ]
 }
 ```
