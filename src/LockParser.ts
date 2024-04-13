@@ -1,9 +1,22 @@
 import AbstractParser from './contracts/Parser';
 
 export default class LockParser extends AbstractParser {
+    private sectionLocked: boolean = false;
+
     protected content: {[key: string]: any} = {};
     protected originalContent: string = "";
     private bloc: {[key: string]: any} = {};
+    public /* private */ static filter: string[] = ["PATH", "GEM", "GIT", "PLATFORMS", "DEPENDENCIES", "BUNDLED WITH"];
+    private static filterMode: string = "default";
+
+    public static only(...elements: string[]) {
+        if (LockParser.filterMode === "default") {
+            LockParser.filter = [];
+            LockParser.filterMode = "only";
+        }
+
+        LockParser.filter = [...new Set(LockParser.filter.concat(elements))];
+    }
 
     public parse(): string {
         const lines = this.originalContent.split(/\r?\n/);
@@ -14,6 +27,12 @@ export default class LockParser extends AbstractParser {
         let lastIndentation: number = 0;
 
         lines.forEach((line: string) => {
+            if (line.startsWith(" ") && this.sectionLocked) {
+                return;
+            }
+
+            this.sectionLocked = false;
+
             if (line.trim() === "") {
                 if (Object.keys(this.bloc).length !== 0) {
                     this.content[parent].push(this.bloc);
@@ -23,8 +42,12 @@ export default class LockParser extends AbstractParser {
 
             if (!line.startsWith(" ")) {
                 if (line.length) {
-                    parent = line;
+                    if (!LockParser.filter.includes(line)) {
+                        this.sectionLocked = true;
+                        return;
+                    }
 
+                    parent = line;
                     if (! this.content.hasOwnProperty(parent)) {
                         this.content[parent] = [];
                     }
@@ -58,7 +81,7 @@ export default class LockParser extends AbstractParser {
             if (line.trim() !== "") {
                 let lineWithoutParentIndentation: string = line.slice(this.bloc[section]["_indentation"]);
                 let firstCharIndex: number = /[a-z]/i.exec(lineWithoutParentIndentation)?.index || 0;
-    
+
                 if (lastIndentation === 0 || firstCharIndex <= lastIndentation) {
                     if (this.bloc[section][sectionParent] && firstCharIndex > this.bloc[section][sectionParent]["_indentation"]) {
                         this.bloc[section][sectionParent].push(line.trim());
@@ -100,8 +123,9 @@ export default class LockParser extends AbstractParser {
         });
     }
 
-    private cleanup() {
+    protected cleanup(): void {
         this.removePrivateKeys(this.content);
         this.simplifyStructure();
+        LockParser.filterMode = "default";
     }
 }
