@@ -16,7 +16,8 @@ Install `@faissaloux/gemfile` using the package manager you want:
 
 - [`Gemfile`](#gemfile-1)
 - [`Gemfile.lock`](#gemfilelock)
-- [`only`](#only)
+- [`Parser filter`](#parser-filter)
+- [`LockParser filter`](#lockparser-filter)
 
 ---
 
@@ -234,7 +235,7 @@ DEPENDENCIES
 }
 ```
 
-### Only
+### Parser filter
 You can choose which elements to return using `only()`.
 
 ```javascript
@@ -279,6 +280,60 @@ let parsed = parser.text(`
         {
             "name": "websocket-client-simple"
         }
+    ]
+}
+```
+
+### LockParser filter
+You can choose which sections to return using `only()`.
+
+```javascript
+LockParser.only("PLATFORMS", "DEPENDENCIES");
+```
+
+```javascript
+import { LockParser } from '@faissaloux/gemfile';
+
+LockParser.only("PLATFORMS", "DEPENDENCIES");
+
+const lockParser = new LockParser();
+let parsed = lockParser.text(`
+PATH
+    remote: .
+    specs:
+    actioncable (7.2.0.alpha)
+        actionpack (= 7.2.0.alpha)
+        activesupport (= 7.2.0.alpha)
+        nio4r (~> 2.0)
+        websocket-driver (>= 0.6.1)
+        zeitwerk (~> 2.6)
+
+PLATFORMS
+    ruby
+    x86_64-darwin
+    x86_64-linux
+
+DEPENDENCIES
+    activerecord-jdbcmysql-adapter (>= 1.3.0)
+    aws-sdk-s3
+
+BUNDLED WITH
+    2.5.4
+`).parse();
+```
+
+```json
+// console.log(parsed);
+
+{
+    "PLATFORMS": [
+        "ruby",
+        "x86_64-darwin",
+        "x86_64-linux"
+    ],
+    "DEPENDENCIES": [
+        "activerecord-jdbcmysql-adapter (>= 1.3.0)",
+        "aws-sdk-s3"
     ]
 }
 ```
