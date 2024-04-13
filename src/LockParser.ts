@@ -1,12 +1,11 @@
 import AbstractParser from './contracts/Parser';
 
 export default class LockParser extends AbstractParser {
-    private sectionLocked: boolean = false;
-
     protected content: {[key: string]: any} = {};
     protected originalContent: string = "";
+    private sectionLocked: boolean = false;
     private bloc: {[key: string]: any} = {};
-    public /* private */ static filter: string[] = ["PATH", "GEM", "GIT", "PLATFORMS", "DEPENDENCIES", "BUNDLED WITH"];
+    private static filter: string[] = ["PATH", "GEM", "GIT", "PLATFORMS", "DEPENDENCIES", "BUNDLED WITH"];
     private static filterMode: string = "default";
 
     public static only(...elements: string[]) {
