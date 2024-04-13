@@ -5,6 +5,7 @@ export default abstract class AbstractParser {
     protected abstract originalContent: string;
 
     public abstract parse(): string;
+    protected abstract cleanup(): void;
 
     public text(text: string): this {
         this.originalContent = text;

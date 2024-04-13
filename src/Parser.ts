@@ -10,11 +10,6 @@ export default class Parser extends AbstractParser {
     private static filter: string[] = ["gem", "version", "require", "github", "git", "branch", "platforms"];
     private static filterMode: string = "default";
 
-    constructor() {
-        super();
-        Parser.filterMode = "default";
-    }
-
     public static only(...elements: string[]) {
         if (Parser.filterMode === "default") {
             Parser.filter = [];
@@ -48,6 +43,8 @@ export default class Parser extends AbstractParser {
         });
 
         this.content[this.root] = dependencies;
+
+        this.cleanup();
 
         return JSON.stringify(this.content);
     }
@@ -85,5 +82,9 @@ export default class Parser extends AbstractParser {
         }
 
         return dependency;
+    }
+
+    protected cleanup(): void {
+        Parser.filterMode = "default";
     }
 }
