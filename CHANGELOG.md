@@ -1,4 +1,9 @@
-## [Unreleased](https://github.com/faissaloux/gemfile/compare/v1.0.0...main)
+## [Unreleased](https://github.com/faissaloux/gemfile/compare/v1.1.0...main)
+
+## [v1.1.0](https://github.com/faissaloux/gemfile/compare/v1.0.0...v1.1.0) - 2024-04-13
+### Added
+- LockParser filter ([#34](https://github.com/faissaloux/gemfile/pull/34))
+- Parser filter ([#33](https://github.com/faissaloux/gemfile/pull/33))
 
 ## [v1.0.0](https://github.com/faissaloux/gemfile/compare/v0.4.1...v1.0.0) - 2024-03-28
 ### Added
